@@ -98,10 +98,10 @@ namespace LiquidProjections.ExampleHost
                 }
                 while ((json != null) && (transactions.Count < pageSize));
 
-                Console.WriteLine(
-                    $"Loaded page of {transactions.Count} transactions " + 
-                    $"(checkpoint {transactions.First().Checkpoint}-{transactions.Last().Checkpoint}) " +
-                    $"with {transactions.Sum(t => t.Events.Count)} events");
+//                Console.WriteLine(
+//                    $"Loaded page of {transactions.Count} transactions " + 
+//                    $"(checkpoint {transactions.First().Checkpoint}-{transactions.Last().Checkpoint}) " +
+//                    $"with {transactions.Sum(t => t.Events.Count)} events");
                 
                 return transactions.ToArray();
             });

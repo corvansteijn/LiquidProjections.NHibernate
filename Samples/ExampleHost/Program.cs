@@ -9,9 +9,9 @@ namespace LiquidProjections.ExampleHost
     {
         public static void Main(string[] args)
         {
-            var eventStore = new JsonFileEventStore("ExampleEvents.zip", 100);
+            var eventStore = new JsonFileEventStore("ExampleEvents.zip", 1000);
 
-            var store = new InMemorySqLiteDatabaseBuilder().Build();
+            var store = new SqlServerDatabaseBuilder().Build();
 
             var dispatcher = new Dispatcher(eventStore.Subscribe);
 

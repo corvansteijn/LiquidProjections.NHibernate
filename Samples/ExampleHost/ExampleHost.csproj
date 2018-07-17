@@ -123,6 +123,7 @@
     <Compile Include="Events\NextReviewScheduledEvent.cs" />
     <Compile Include="Events\StateRevertedEvent.cs" />
     <Compile Include="Events\StateTransitionedEvent.cs" />
+    <Compile Include="Events\UnhandledEvent.cs" />
     <Compile Include="Events\ValidityPeriodApprovedEvent.cs" />
     <Compile Include="Events\ValidityPeriodCanceledEvent.cs" />
     <Compile Include="Events\ValidityPeriodPlannedEvent.cs" />
@@ -141,6 +142,7 @@
     <Compile Include="CountsProjector.cs" />
     <Compile Include="Events\WarrantAssignedEvent.cs" />
     <Compile Include="RealtimeStateEvaluator.cs" />
+    <Compile Include="SqlServerDatabaseBuilder.cs" />
     <Compile Include="StatisticsController.cs" />
     <Compile Include="TinyIoC.cs" />
     <Compile Include="TinyIocWebApiDependencyResolver.cs" />

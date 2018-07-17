@@ -22,6 +22,7 @@ namespace LiquidProjections.ExampleHost
         private NHibernateChildProjector<CountryLookup, string> countryProjector;
         private readonly LruProjectionCache<DocumentCountProjection, string> cache;
         private long eventCount;
+        private long lastPerformanceMessage = 0;
 
         public CountsProjector(Dispatcher dispatcher, Func<ISession> sessionFactory)
         {
@@ -241,6 +242,7 @@ namespace LiquidProjections.ExampleHost
                 BatchSize = 20,
                 Cache = cache,
                 ExceptionHandler = OnException,
+                PersistStateBehavior = PersistStateBehavior.DirtyBatch,
                 
                 // Make sure that we no longer process corrupted projections. 
                 Filter = p => !p.Corrupt
@@ -305,7 +307,7 @@ namespace LiquidProjections.ExampleHost
             else
             {
                 // So we found the failing transaction. So let's mark it as corrupt and ignore the transaction.
-                Console.WriteLine(exception.Message);
+                //Console.WriteLine(exception.Message);
 
                 using (var session = sessionFactory())
                 {
@@ -349,14 +351,18 @@ namespace LiquidProjections.ExampleHost
 
             eventCount += transactions.Sum(t => t.Events.Count);
 
-            long elapsedTotalSeconds = (long) stopwatch.Elapsed.TotalSeconds;
+            long elapsedTotalMilliseconds = (long) stopwatch.Elapsed.TotalMilliseconds;
 
-            if (elapsedTotalSeconds > 0)
+            if (elapsedTotalMilliseconds > 0)
             {
-                int ratePerSecond = (int) (eventCount / elapsedTotalSeconds);
+                int ratePerSecond = (int) (((double)eventCount / (double)elapsedTotalMilliseconds) * 1000.0);
 
-                Console.WriteLine($"{DateTime.Now}: Processed {eventCount} events " +
-                                  $"(rate: {ratePerSecond}/second, hits: {cache.Hits}, Misses: {cache.Misses})");
+                if (elapsedTotalMilliseconds > (lastPerformanceMessage + 10000))
+                {
+                    lastPerformanceMessage = elapsedTotalMilliseconds;
+                    Console.WriteLine($"{DateTime.Now}: Processed {eventCount} events " +
+                                      $"(rate: {ratePerSecond}/second, hits: {cache.Hits}, Misses: {cache.Misses})");
+                }
             }
         }
     }
